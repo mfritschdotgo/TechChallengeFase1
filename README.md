@@ -26,7 +26,7 @@ The image for this project is also available on docker hub: https://hub.docker.c
 
 ### Docker Setup
 
-To set up the application using Docker, follow these steps:
+To set up the application using Docker and building the image from this repository, follow these steps:
 
 1. Ensure you have Docker installed on your machine and be logged into a registry (optional).
 2. Ensure you have a mongodb installation.
@@ -41,6 +41,17 @@ To set up the application using Docker, follow these steps:
 7. Uploading the image to a registry:
    ```sh
     docker push yourRepository/skina-lanches-api:version
+
+To set up the application using Docker using the official image available on docker hub, follow these steps:
+
+1. Ensure you have Docker installed on your machine.
+2. Download the image:
+   ```sh
+   docker pull mrcsfritsch/skinaapis
+3. Ensure you have a mongodb installation.
+4. Run the Docker container:
+    ```sh
+    docker run -p 9090:9090 -e MONGO_USER=user -e MONGO_PASSWORD=password -e MONGO_PORT=port -e MONGO_HOST=localhost -e MONGO_DATABASE=database mrcsfritsch/skinaapis
    
 ### Compose Setup
 
