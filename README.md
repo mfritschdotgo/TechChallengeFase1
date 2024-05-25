@@ -184,6 +184,16 @@ To set up the application using Docker, follow these steps:
     - `500`: Internal server error if there is a problem on the server side.
 
 - **PUT /products/{id}**
+  - Replaced product by its ID.
+  - Parameters:
+    - `id` (string): Product ID.
+  - Body: `dto.CreateProductRequest`
+  - Responses:
+    - `200`: Product successfully updated.
+    - `400`: Invalid input, object is invalid.
+    - `404`: Product not found.
+    - `500`: Internal server error.
+- **PATCH /products/{id}**
   - Updates product details by its ID.
   - Parameters:
     - `id` (string): Product ID.
