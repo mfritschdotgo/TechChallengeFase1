@@ -56,10 +56,12 @@ To set up the application using Docker compose, follow these steps:
 
 1. Access the skinaapis service address with the port defined in the .env file:
    http://127.0.0.1:9090/docs/index.html#/
-2. Add a client via the using method post endpoint [Clients](#clients).
-3. Add a product via the using method post endpoint [Products](#products)
-4. Add a request via the using method post endpoint [Orders](#orders)
-5. Simulate a fake checkout through the endpoint using method post [FakeCheckout](#fakeCheckout)
+2. Add a client via the "post" method using the endpoint [Clients](#clients).
+3. Get the category id that you will use when inserting a product, using the endpoint get method [Categories](#categories) 
+4. Add a product via the "post" method using the endpoint [Products](#products)
+5. Get the ids of the products that you will insert in your order, using the endpoint's get method [Products](#products), it is possible via query param to search by category.
+6. Add a request via the "post" method using the endpoint [Orders](#orders)
+7. Simulate a fake checkout through the endpoint using method post [FakeCheckout](#fakeCheckout), this will change the order status to finished.
 
 ## API Endpoints
 
