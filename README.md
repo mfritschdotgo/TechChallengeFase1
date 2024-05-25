@@ -4,6 +4,7 @@
 
 The Skina Lanches Management API is designed to facilitate the management of products, categories, clients, and orders for a sandwich shop. The API provides endpoints to create, read, update, and delete entities within the system.
 This project follows a hexagonal architecture and is based on a DDD (Domain driven design) generated from event storming in which the steps can be analyzed in: https://miro.com/app/board/uXjVKTBf0pw=/
+The image for this project is also available on docker hub: https://hub.docker.com/r/mrcsfritsch/skinaapis
 
 ## Table of Contents
 
@@ -25,7 +26,7 @@ This project follows a hexagonal architecture and is based on a DDD (Domain driv
 
 ### Docker Setup
 
-To set up the application using Docker, follow these steps:
+To set up the application using Docker and building the image from this repository, follow these steps:
 
 1. Ensure you have Docker installed on your machine and be logged into a registry (optional).
 2. Ensure you have a mongodb installation.
@@ -40,6 +41,17 @@ To set up the application using Docker, follow these steps:
 7. Uploading the image to a registry:
    ```sh
     docker push yourRepository/skina-lanches-api:version
+
+To set up the application using Docker using the official image available on docker hub, follow these steps:
+
+1. Ensure you have Docker installed on your machine.
+2. Download the image:
+   ```sh
+   docker pull mrcsfritsch/skinaapis
+3. Ensure you have a mongodb installation.
+4. Run the Docker container:
+    ```sh
+    docker run -p 9090:9090 -e MONGO_USER=user -e MONGO_PASSWORD=password -e MONGO_PORT=port -e MONGO_HOST=localhost -e MONGO_DATABASE=database mrcsfritsch/skinaapis
    
 ### Compose Setup
 
@@ -62,6 +74,8 @@ To set up the application using Docker compose, follow these steps:
 5. Get the ids of the products that you will insert in your order, using the endpoint's get method [Products](#products), it is possible via query param to search by category.
 6. Add a request via the "post" method using the endpoint [Orders](#orders)
 7. Simulate a fake checkout through the endpoint using method post [FakeCheckout](#fakeCheckout), this will change the order status to finished.
+
+Obs.: Through swagger for more details about the APIs
 
 ## API Endpoints
 
