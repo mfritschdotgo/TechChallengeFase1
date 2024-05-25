@@ -12,6 +12,7 @@ This project follows a hexagonal architecture and is based on a DDD (Domain driv
   - [Table of Contents](#table-of-contents)
   - [Setup](#setup)
     - [Docker Setup](#docker-setup)
+    - [Compose Setup](#compose-setup)
   - [API Endpoints](#api-endpoints)
     - [Categories](#categories)
     - [Clients](#clients)
@@ -33,12 +34,22 @@ To set up the application using Docker, follow these steps:
    docker build -t yourRepository/skina-lanches-api:version .
 5. Run the Docker container:
     ```sh
-    docker run -p 9090:9090 yourRepository/skina-lanches-api:version
+    docker run -p 9090:9090 -e MONGO_USER=user -e MONGO_PASSWORD=password -e MONGO_PORT=port -e MONGO_HOST=localhost -e MONGO_DATABASE=database -e SWAG_HOST=localhost yourRepository/skina-lanches-api:version
 6. Uploading the image to a registry:
    ```sh
     docker push yourRepository/skina-lanches-api:version
+   
+### Compose Setup
 
+To set up the application using Docker compose, follow these steps:
 
+1. Ensure you have Docker engine and docker compose installed on your machine.
+2. Navigate to the compose directory.
+3. Edit the .env file, setting the environment variables as desired
+4. Start service from docker compose file, must be in the compose directory:
+   ```sh
+   docker compose up -d
+   
 ## API Endpoints
 
 ### Categories
