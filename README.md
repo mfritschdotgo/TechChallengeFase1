@@ -27,15 +27,16 @@ This project follows a hexagonal architecture and is based on a DDD (Domain driv
 To set up the application using Docker, follow these steps:
 
 1. Ensure you have Docker installed on your machine and be logged into a registry (optional).
-2. Clone the repository to your local machine.
-3. Navigate to the project directory.
-4. Build the Docker image using the provided Dockerfile:
+2. Ensure you have a mongodb installation.
+3. Clone the repository to your local machine.
+4. Navigate to the project directory.
+5. Build the Docker image using the provided Dockerfile:
    ```sh
    docker build -t yourRepository/skina-lanches-api:version .
-5. Run the Docker container:
+6. Run the Docker container:
     ```sh
     docker run -p 9090:9090 -e MONGO_USER=user -e MONGO_PASSWORD=password -e MONGO_PORT=port -e MONGO_HOST=localhost -e MONGO_DATABASE=database -e SWAG_HOST=localhost yourRepository/skina-lanches-api:version
-6. Uploading the image to a registry:
+7. Uploading the image to a registry:
    ```sh
     docker push yourRepository/skina-lanches-api:version
    
