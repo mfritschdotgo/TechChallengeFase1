@@ -25,15 +25,18 @@ This project follows a hexagonal architecture and is based on a DDD (Domain driv
 
 To set up the application using Docker, follow these steps:
 
-1. Ensure you have Docker installed on your machine.
+1. Ensure you have Docker installed on your machine and be logged into a registry (optional).
 2. Clone the repository to your local machine.
 3. Navigate to the project directory.
 4. Build the Docker image using the provided Dockerfile:
    ```sh
-   docker build -t skina-lanches-api .
+   docker build -t yourRepository/skina-lanches-api:version .
 5. Run the Docker container:
     ```sh
-    docker run -p 9090:9090 skina-lanches-api
+    docker run -p 9090:9090 yourRepository/skina-lanches-api:version
+6. Uploading the image to a registry:
+   ```sh
+    docker push yourRepository/skina-lanches-api:version
 
 
 ## API Endpoints
