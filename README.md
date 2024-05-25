@@ -213,3 +213,14 @@ To set up the application using Docker, follow these steps:
     - `400`: Bad request if the ID is not provided or is invalid.
     - `404`: Product not found if the ID does not match any product.
     - `500`: Internal server error if there is a problem deleting the product.# techchallenge
+### fakeCheckout
+
+- **POST /fakeCheckout/{id}**
+  - Adds a new client to the database.
+  - Parameters:
+    - `id` (string): Product ID.
+  - Body: `dto.CreateClientRequest`
+  - Responses:
+    - `200`: Successfully fake checkout.
+    - `400`: Bad request if the ID is not provided or invalid.
+    - `500`: Internal server error if there is a problem on the server side.
