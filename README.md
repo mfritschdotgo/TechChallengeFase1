@@ -35,7 +35,7 @@ To set up the application using Docker, follow these steps:
    docker build -t yourRepository/skina-lanches-api:version .
 6. Run the Docker container:
     ```sh
-    docker run -p 9090:9090 -e MONGO_USER=user -e MONGO_PASSWORD=password -e MONGO_PORT=port -e MONGO_HOST=localhost -e MONGO_DATABASE=database -e SWAG_HOST=localhost yourRepository/skina-lanches-api:version
+    docker run -p 9090:9090 -e MONGO_USER=user -e MONGO_PASSWORD=password -e MONGO_PORT=port -e MONGO_HOST=localhost -e MONGO_DATABASE=database yourRepository/skina-lanches-api:version
 7. Uploading the image to a registry:
    ```sh
     docker push yourRepository/skina-lanches-api:version
