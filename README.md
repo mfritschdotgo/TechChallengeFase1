@@ -13,6 +13,7 @@ This project follows a hexagonal architecture and is based on a DDD (Domain driv
   - [Setup](#setup)
     - [Docker Setup](#docker-setup)
     - [Compose Setup](#compose-setup)
+  - [Integrated testing via Swagger](#integrated-testing-via-Swagger)
   - [API Endpoints](#api-endpoints)
     - [Categories](#categories)
     - [Clients](#clients)
