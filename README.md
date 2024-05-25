@@ -55,7 +55,10 @@ To set up the application using Docker compose, follow these steps:
 
 1. Access the skinaapis service address with the port defined in the .env file:
    http://127.0.0.1:9090/docs/index.html#/
-2. Adicione um cliente através do endpoint 
+2. Add a client via the using method post endpoint [Clients](#clients).
+3. Add a product via the using method post endpoint [Products](#products)
+4. Add a request via the using method post endpoint [Orders](#orders)
+5. Simulate a fake checkout through the endpoint using method post [FakeCheckout](#fakeCheckout)
 ## API Endpoints
 
 ### Categories
