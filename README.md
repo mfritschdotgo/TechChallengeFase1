@@ -50,7 +50,6 @@ To set up the application using Docker compose, follow these steps:
    ```sh
    docker compose up -d
 
-
 ## Integrated testing via Swagger  
 
 1. Access the skinaapis service address with the port defined in the .env file:
@@ -59,6 +58,7 @@ To set up the application using Docker compose, follow these steps:
 3. Add a product via the using method post endpoint [Products](#products)
 4. Add a request via the using method post endpoint [Orders](#orders)
 5. Simulate a fake checkout through the endpoint using method post [FakeCheckout](#fakeCheckout)
+
 ## API Endpoints
 
 ### Categories
