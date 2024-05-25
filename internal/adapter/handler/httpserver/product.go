@@ -52,7 +52,50 @@ func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(product)
 }
 
-// UpdateProduct updates an existing product with the provided details.
+// UpdateProduct replace an existing product with the provided details.
+// @Summary Replace an existing product
+// @Description Replace product details in the database by ID.
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param id path string true "Product ID"
+// @Param		request	body		dto.CreateProductRequest	true	"Product object that needs to be replaced"
+// @Success 200 {object} domain.Product "Product successfully updated"
+// @Failure 400 {string} string "Invalid input, Object is invalid"
+// @Failure 404 {string} string "Product not found"
+// @Failure 500 {string} string "Internal server error"
+// @Router /products/{id} [patch]
+func (h *ProductHandler) ReplaceProduct(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		http.Error(w, "Invalid product ID", http.StatusBadRequest)
+		return
+	}
+
+	var productDto dto.CreateProductRequest
+	if err := json.NewDecoder(r.Body).Decode(&productDto); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	product, err := h.service.ReplaceProduct(ctx, id, productDto)
+
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			http.Error(w, err.Error(), http.StatusNotFound)
+		} else {
+			http.Error(w, "Error updating product", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(product)
+}
+
+// UpdateProduct update an existing product with the provided details.
 // @Summary Update an existing product
 // @Description Update product details in the database by ID.
 // @Tags products
@@ -80,9 +123,10 @@ func (h *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	product, err := h.service.UpdateProduct(ctx, id, productDto)
+
 	if err != nil {
 		if strings.Contains(err.Error(), "not found") {
-			http.Error(w, "Product not found", http.StatusNotFound)
+			http.Error(w, err.Error(), http.StatusNotFound)
 		} else {
 			http.Error(w, "Error updating product", http.StatusInternalServerError)
 		}

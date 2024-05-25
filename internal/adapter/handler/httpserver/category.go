@@ -53,7 +53,51 @@ func (h *CategoryHandler) CreateCategory(w http.ResponseWriter, r *http.Request)
 	json.NewEncoder(w).Encode(category)
 }
 
-// UpdateCategory updates an existing category with the provided details.
+// ReplaceCategory replace an existing category with the provided details.
+// @Summary Replace an existing category
+// @Description Replace category details in the database by ID.
+// @Tags categories
+// @Accept json
+// @Produce json
+// @Param id path string true "Category ID"
+// @Param		request	body		dto.CreateCategoryRequest	true	"Category object that needs to be updated"
+// @Success 200 {object} domain.Category "Category successfully updated"
+// @Failure 400 {string} string "Invalid input, Object is invalid"
+// @Failure 404 {string} string "Category not found"
+// @Failure 500 {string} string "Internal server error"
+// @Router /categories/{id} [put]
+func (h *CategoryHandler) ReplaceCategory(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		http.Error(w, "Invalid category ID", http.StatusBadRequest)
+		return
+	}
+
+	var category domain.Category
+
+	if err := json.NewDecoder(r.Body).Decode(&category); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	response, err := h.service.ReplaceCategory(ctx, id, &category)
+
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			http.Error(w, "Category not found", http.StatusNotFound)
+		} else {
+			http.Error(w, "Error replacing category", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(response)
+}
+
+// UpdateCategory update an existing category with the provided details.
 // @Summary Update an existing category
 // @Description Update category details in the database by ID.
 // @Tags categories
@@ -65,7 +109,7 @@ func (h *CategoryHandler) CreateCategory(w http.ResponseWriter, r *http.Request)
 // @Failure 400 {string} string "Invalid input, Object is invalid"
 // @Failure 404 {string} string "Category not found"
 // @Failure 500 {string} string "Internal server error"
-// @Router /categories/{id} [put]
+// @Router /categories/{id} [patch]
 func (h *CategoryHandler) UpdateCategory(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	id := chi.URLParam(r, "id")
@@ -80,7 +124,9 @@ func (h *CategoryHandler) UpdateCategory(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	if _, err := h.service.UpdateCategory(ctx, id, &category); err != nil {
+	response, err := h.service.UpdateCategory(ctx, id, &category)
+
+	if err != nil {
 		if strings.Contains(err.Error(), "not found") {
 			http.Error(w, "Category not found", http.StatusNotFound)
 		} else {
@@ -91,7 +137,7 @@ func (h *CategoryHandler) UpdateCategory(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(category)
+	json.NewEncoder(w).Encode(response)
 }
 
 // GetCategoryByID retrieves a category by its ID

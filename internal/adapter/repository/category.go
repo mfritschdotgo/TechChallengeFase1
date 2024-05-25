@@ -51,7 +51,7 @@ func (cr *CategoryRepository) GetCategoryByID(ctx context.Context, id string) (*
 	return &category, nil
 }
 
-func (cr *CategoryRepository) UpdateCategory(ctx context.Context, category *domain.Category) (*domain.Category, error) {
+func (cr *CategoryRepository) ReplaceCategory(ctx context.Context, category *domain.Category) (*domain.Category, error) {
 	uuid, err := uuid.Parse(category.ID.String())
 	if err != nil {
 		return nil, err
@@ -73,7 +73,7 @@ func (cr *CategoryRepository) UpdateCategory(ctx context.Context, category *doma
 	return category, nil
 }
 
-func (cr *CategoryRepository) PatchCategory(ctx context.Context, category *domain.Category) (*domain.Category, error) {
+func (cr *CategoryRepository) UpdateCategory(ctx context.Context, category *domain.Category) (*domain.Category, error) {
 	uuid, err := uuid.Parse(category.ID.String())
 	if err != nil {
 		return nil, err

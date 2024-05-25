@@ -136,7 +136,7 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update category details in the database by ID.",
+                "description": "Replace category details in the database by ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -146,7 +146,7 @@ const docTemplate = `{
                 "tags": [
                     "categories"
                 ],
-                "summary": "Update an existing category",
+                "summary": "Replace an existing category",
                 "parameters": [
                     {
                         "type": "string",
@@ -233,6 +233,63 @@ const docTemplate = `{
                         "description": "Internal server error if there is a problem deleting the category"
                     }
                 }
+            },
+            "patch": {
+                "description": "Update category details in the database by ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "categories"
+                ],
+                "summary": "Update an existing category",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Category object that needs to be updated",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateCategoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category successfully updated",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Category"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input, Object is invalid",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Category not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/clients": {
@@ -309,6 +366,44 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Client not found if the CPF does not match any Client"
+                    }
+                }
+            }
+        },
+        "/fakeCheckout/{id}": {
+            "post": {
+                "description": "Simulates a checkout, changing status to 4 - finished",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "fakeCheckout"
+                ],
+                "summary": "Simulates a checkout",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully fake checkout",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Order"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request if the ID is not provided or invalid"
+                    },
+                    "500": {
+                        "description": "Internal server error if there is a problem on the server side"
                     }
                 }
             }
@@ -430,6 +525,51 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Product not found if the ID does not match any order"
+                    }
+                }
+            }
+        },
+        "/orders/{id}/{status}": {
+            "patch": {
+                "description": "Update order status, statuses 1 to 4 allowed",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Update order status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order ID",
+                        "name": "status",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully status updated",
+                        "schema": {
+                            "$ref": "#/definitions/domain.OrderStatus"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request if the Status is not provided or invalid"
+                    },
+                    "500": {
+                        "description": "Internal server error if there is a problem on the server side"
                     }
                 }
             }
@@ -652,6 +792,63 @@ const docTemplate = `{
                         "description": "Internal server error if there is a problem deleting the product"
                     }
                 }
+            },
+            "patch": {
+                "description": "Replace product details in the database by ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "products"
+                ],
+                "summary": "Replace an existing product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Product object that needs to be replaced",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateProductRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product successfully updated",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Product"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input, Object is invalid",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         }
     },
@@ -717,6 +914,9 @@ const docTemplate = `{
                 "status": {
                     "type": "integer"
                 },
+                "status_description": {
+                    "type": "string"
+                },
                 "total": {
                     "type": "number"
                 },
@@ -728,17 +928,28 @@ const docTemplate = `{
         "domain.OrderItem": {
             "type": "object",
             "properties": {
-                "order_id": {
-                    "type": "string"
-                },
                 "price": {
                     "type": "number"
                 },
                 "product_id": {
                     "type": "string"
                 },
+                "product_name": {
+                    "type": "string"
+                },
                 "quantity": {
                     "type": "integer"
+                }
+            }
+        },
+        "domain.OrderStatus": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "integer"
+                },
+                "status_description": {
+                    "type": "string"
                 }
             }
         },
@@ -807,9 +1018,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/dto.ProductItem"
                     }
-                },
-                "status": {
-                    "type": "integer"
                 }
             }
         },

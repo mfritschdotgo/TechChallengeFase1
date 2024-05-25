@@ -1,9 +1,5 @@
 package configs
 
-import (
-	"os"
-)
-
 type Configs struct {
 	MONGO_USER     string `mapstructure:"MONGO_USER"`
 	MONGO_PASSWORD string `mapstructure:"MONGO_PASSWORD"`
@@ -15,11 +11,11 @@ type Configs struct {
 
 func GetConfig() *Configs {
 	return &Configs{
-		MONGO_USER:     os.Getenv("MONGO_USER"),
-		MONGO_PASSWORD: os.Getenv("MONGO_PASSWORD"),
-		MONGO_HOST:     os.Getenv("MONGO_HOST"),
-		MONGO_PORT:     os.Getenv("MONGO_PORT"),
-		MONGO_DATABASE: os.Getenv("MONGO_DATABASE"),
-		HTTP_PORT:      os.Getenv("HTTP_PORT"),
+		MONGO_USER:     "admin",        //os.Getenv("MONGO_USER"),
+		MONGO_PASSWORD: "password",     //os.Getenv("MONGO_PASSWORD"),
+		MONGO_HOST:     "localhost",    //os.Getenv("MONGO_HOST"),
+		MONGO_PORT:     "27017",        //os.Getenv("MONGO_PORT"),
+		MONGO_DATABASE: "skinaapis_db", //os.Getenv("MONGO_DATABASE"),
+		HTTP_PORT:      "9098",         //os.Getenv("HTTP_PORT"),
 	}
 }

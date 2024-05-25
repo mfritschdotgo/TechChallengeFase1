@@ -69,3 +69,13 @@ func (pr *OrderRepository) GetOrderByID(ctx context.Context, id string) (*domain
 	}
 	return &order, nil
 }
+
+func (pr *OrderRepository) SetStatus(ctx context.Context, id uuid.UUID, status int, description string) error {
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{"status": status, "status_description": description}}
+	_, err := pr.Collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return err
+	}
+	return nil
+}

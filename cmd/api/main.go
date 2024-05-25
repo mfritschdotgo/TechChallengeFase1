@@ -46,6 +46,11 @@ func main() {
 	orderService := service.NewOrderService(orderRepo, clientService, productService)
 	orderHandler := httpserver.NewOrderHandler(orderService)
 
+	err = categoryService.InitializeCategories(context.Background())
+	if err != nil {
+		panic(err)
+	}
+
 	r := chi.NewRouter()
 
 	// Middlewares
@@ -54,7 +59,8 @@ func main() {
 
 	r.Route("/products", func(r chi.Router) {
 		r.Post("/", productHandler.CreateProduct)
-		r.Put("/{id}", productHandler.UpdateProduct)
+		r.Put("/{id}", productHandler.ReplaceProduct)
+		r.Patch("/{id}", productHandler.UpdateProduct)
 		r.Get("/{id}", productHandler.GetProductByID)
 		r.Get("/", productHandler.GetProducts)
 		r.Delete("/{id}", productHandler.DeleteProduct)
@@ -62,7 +68,8 @@ func main() {
 
 	r.Route("/categories", func(r chi.Router) {
 		r.Post("/", categoryHandler.CreateCategory)
-		r.Put("/{id}", categoryHandler.UpdateCategory)
+		r.Patch("/{id}", categoryHandler.UpdateCategory)
+		r.Put("/{id}", categoryHandler.ReplaceCategory)
 		r.Get("/{id}", categoryHandler.GetCategoryByID)
 		r.Get("/", categoryHandler.GetCategories)
 		r.Delete("/{id}", categoryHandler.DeleteCategory)
@@ -77,6 +84,11 @@ func main() {
 		r.Get("/", orderHandler.GetOrders)
 		r.Get("/{id}", orderHandler.GetOrderByID)
 		r.Post("/", orderHandler.CreateOrder)
+		r.Patch("/{id}/{status}", orderHandler.SetOrderStatus)
+	})
+
+	r.Route("/fakeCheckout", func(r chi.Router) {
+		r.Post("/{id}", orderHandler.FakeCheckout)
 	})
 
 	r.Get("/docs/*", httpSwagger.Handler(httpSwagger.URL("/docs/doc.json")))

@@ -44,7 +44,7 @@ func (s *OrderService) CreateOrder(ctx context.Context, dto dto.CreateOrderReque
 
 	items := ConvertDTOtoSlice(dto.Products, productPriceMap)
 
-	order, err := domain.NewOrder(dto.Client, items, dto.Status, total)
+	order, err := domain.NewOrder(dto.Client, items, 0, total, "created")
 	if err != nil {
 		return nil, fmt.Errorf("failed to create order instance: %w", err)
 	}
@@ -61,9 +61,10 @@ func ConvertDTOtoSlice(dtoProducts []dto.ProductItem, prices map[string]float64)
 	var domainItems []domain.OrderItem
 	for _, item := range dtoProducts {
 		domainItems = append(domainItems, domain.OrderItem{
-			ProductID: item.ID,
-			Quantity:  item.Quantity,
-			Price:     prices[item.ID] * float64(item.Quantity),
+			ProductID:   item.ID,
+			ProductName: item.ProductName,
+			Quantity:    item.Quantity,
+			Price:       prices[item.ID] * float64(item.Quantity),
 		})
 	}
 	return domainItems
@@ -99,4 +100,31 @@ func (s *OrderService) GetOrders(ctx context.Context, page, size int) ([]domain.
 	}
 
 	return orders, nil
+}
+
+func (s *OrderService) SetOrderStatus(ctx context.Context, id string, status int) (*domain.OrderStatus, error) {
+	uuidID, err := uuid.Parse(id)
+	if err != nil {
+		return nil, fmt.Errorf("invalid ID format: %w", err)
+	}
+
+	_, err = s.orderRepo.GetOrderByID(ctx, uuidID.String())
+
+	if err != nil {
+		return nil, fmt.Errorf("order not found: %w", err)
+	}
+
+	orderStatus, err := domain.SetStatus(status)
+
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
+
+	err = s.orderRepo.SetStatus(ctx, uuidID, orderStatus.Status, orderStatus.StatusDescription)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to update order status: %w", err)
+	}
+
+	return orderStatus, nil
 }

@@ -40,6 +40,8 @@ definitions:
         type: array
       status:
         type: integer
+      status_description:
+        type: string
       total:
         type: number
       updated_at:
@@ -47,14 +49,21 @@ definitions:
     type: object
   domain.OrderItem:
     properties:
-      order_id:
-        type: string
       price:
         type: number
       product_id:
         type: string
+      product_name:
+        type: string
       quantity:
         type: integer
+    type: object
+  domain.OrderStatus:
+    properties:
+      status:
+        type: integer
+      status_description:
+        type: string
     type: object
   domain.Product:
     properties:
@@ -99,8 +108,6 @@ definitions:
         items:
           $ref: '#/definitions/dto.ProductItem'
         type: array
-      status:
-        type: integer
     type: object
   dto.CreateProductRequest:
     properties:
@@ -237,7 +244,7 @@ paths:
       summary: Get a category
       tags:
       - categories
-    put:
+    patch:
       consumes:
       - application/json
       description: Update category details in the database by ID.
@@ -273,6 +280,44 @@ paths:
           schema:
             type: string
       summary: Update an existing category
+      tags:
+      - categories
+    put:
+      consumes:
+      - application/json
+      description: Replace category details in the database by ID.
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Category object that needs to be updated
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category successfully updated
+          schema:
+            $ref: '#/definitions/domain.Category'
+        "400":
+          description: Invalid input, Object is invalid
+          schema:
+            type: string
+        "404":
+          description: Category not found
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Replace an existing category
       tags:
       - categories
   /clients:
@@ -326,6 +371,31 @@ paths:
       summary: Get a client
       tags:
       - clients
+  /fakeCheckout/{id}:
+    post:
+      consumes:
+      - application/json
+      description: Simulates a checkout, changing status to 4 - finished
+      parameters:
+      - description: order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully fake checkout
+          schema:
+            $ref: '#/definitions/domain.Order'
+        "400":
+          description: Bad request if the ID is not provided or invalid
+        "500":
+          description: Internal server error if there is a problem on the server side
+      summary: Simulates a checkout
+      tags:
+      - fakeCheckout
   /orders:
     get:
       consumes:
@@ -404,6 +474,36 @@ paths:
         "404":
           description: Product not found if the ID does not match any order
       summary: Get a order
+      tags:
+      - orders
+  /orders/{id}/{status}:
+    patch:
+      consumes:
+      - application/json
+      description: Update order status, statuses 1 to 4 allowed
+      parameters:
+      - description: order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: order ID
+        in: path
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully status updated
+          schema:
+            $ref: '#/definitions/domain.OrderStatus'
+        "400":
+          description: Bad request if the Status is not provided or invalid
+        "500":
+          description: Internal server error if there is a problem on the server side
+      summary: Update order status
       tags:
       - orders
   /products:
@@ -513,6 +613,44 @@ paths:
         "404":
           description: Product not found if the ID does not match any product
       summary: Get a product
+      tags:
+      - products
+    patch:
+      consumes:
+      - application/json
+      description: Replace product details in the database by ID.
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Product object that needs to be replaced
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product successfully updated
+          schema:
+            $ref: '#/definitions/domain.Product'
+        "400":
+          description: Invalid input, Object is invalid
+          schema:
+            type: string
+        "404":
+          description: Product not found
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Replace an existing product
       tags:
       - products
     put:

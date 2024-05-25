@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/go-chi/chi"
 
@@ -113,4 +114,86 @@ func (h *OrderHandler) GetOrders(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(orders)
+}
+
+// update order status
+// @Summary Update order status
+// @Description Update order status, statuses 1 to 4 allowed
+// @Tags orders
+// @Accept json
+// @Produce json
+// @Param id path string true "order ID"
+// @Param status path string true "order ID"
+// @Success 200 {object} domain.OrderStatus "Successfully status updated"
+// @Failure 400 "Bad request if the ID is not provided or invalid"
+// @Failure 400 "Bad request if the Status is not provided or invalid"
+// @Failure 500 "Internal server error if there is a problem on the server side"
+// @Router /orders/{id}/{status} [patch]
+func (h *OrderHandler) SetOrderStatus(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	id := chi.URLParam(r, "id")
+
+	if id == "" {
+		http.Error(w, "Invalid order ID", http.StatusBadRequest)
+		return
+	}
+
+	status, err := strconv.Atoi(chi.URLParam(r, "status"))
+	if err != nil {
+		http.Error(w, "Invalid status", http.StatusBadRequest)
+		return
+	}
+
+	orderStatus, err := h.service.SetOrderStatus(ctx, id, status)
+
+	if err != nil {
+		if strings.Contains(err.Error(), "invalid status") {
+			http.Error(w, "Invalid status", http.StatusBadRequest)
+		} else {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(orderStatus)
+}
+
+// simulates a checkout
+// @Summary Simulates a checkout
+// @Description Simulates a checkout, changing status to 4 - finished
+// @Tags fakeCheckout
+// @Accept json
+// @Produce json
+// @Param id path string true "order ID"
+// @Success 200 {object} domain.Order "Successfully fake checkout"
+// @Failure 400 "Bad request if the ID is not provided or invalid"
+// @Failure 500 "Internal server error if there is a problem on the server side"
+// @Router /fakeCheckout/{id} [post]
+func (h *OrderHandler) FakeCheckout(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	id := chi.URLParam(r, "id")
+
+	if id == "" {
+		http.Error(w, "Invalid order ID", http.StatusBadRequest)
+		return
+	}
+
+	_, err := h.service.SetOrderStatus(ctx, id, 4)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+
+	order, err := h.service.GetOrderByID(ctx, id)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(order)
 }
