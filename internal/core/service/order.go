@@ -31,18 +31,27 @@ func (s *OrderService) CreateOrder(ctx context.Context, dto dto.CreateOrderReque
 	}
 
 	total := 0.0
-	productPriceMap := make(map[string]float64)
+	productDetails := make(map[string]struct {
+		Price float64
+		Name  string
+	})
 
 	for _, item := range dto.Products {
 		product, err := s.productService.GetProductByID(ctx, item.ID)
 		if err != nil {
 			return nil, fmt.Errorf("product validation failed for product ID %s: %w", item.ID, err)
 		}
-		productPriceMap[item.ID] = product.Price
+		productDetails[item.ID] = struct {
+			Price float64
+			Name  string
+		}{
+			Price: product.Price,
+			Name:  product.Name,
+		}
 		total += product.Price * float64(item.Quantity)
 	}
 
-	items := ConvertDTOtoSlice(dto.Products, productPriceMap)
+	items := ConvertDTOtoSlice(dto.Products, productDetails)
 
 	order, err := domain.NewOrder(dto.Client, items, 0, total, "created")
 	if err != nil {
@@ -57,14 +66,18 @@ func (s *OrderService) CreateOrder(ctx context.Context, dto dto.CreateOrderReque
 	return savedOrder, nil
 }
 
-func ConvertDTOtoSlice(dtoProducts []dto.ProductItem, prices map[string]float64) []domain.OrderItem {
+func ConvertDTOtoSlice(dtoProducts []dto.ProductItem, productDetails map[string]struct {
+	Price float64
+	Name  string
+}) []domain.OrderItem {
 	var domainItems []domain.OrderItem
 	for _, item := range dtoProducts {
+		details := productDetails[item.ID]
 		domainItems = append(domainItems, domain.OrderItem{
 			ProductID:   item.ID,
-			ProductName: item.ProductName,
+			ProductName: details.Name,
 			Quantity:    item.Quantity,
-			Price:       prices[item.ID] * float64(item.Quantity),
+			Price:       details.Price * float64(item.Quantity),
 		})
 	}
 	return domainItems
