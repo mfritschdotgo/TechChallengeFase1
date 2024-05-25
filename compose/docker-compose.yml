@@ -9,7 +9,6 @@ services:
       - MONGO_PORT=${MONGO_PORT}
       - MONGO_HOST=mongodb
       - MONGO_DATABASE=skinaapis_db
-      - SWAG_HOST=${SWAG_HOST}
     depends_on:
       - mongodb
     networks:
