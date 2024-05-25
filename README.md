@@ -49,7 +49,13 @@ To set up the application using Docker compose, follow these steps:
 4. Start service from docker compose file, must be in the compose directory:
    ```sh
    docker compose up -d
-   
+
+
+## Integrated testing via Swagger  
+
+1. Access the skinaapis service address with the port defined in the .env file:
+   http://127.0.0.1:9090/docs/index.html#/
+2. Adicione um cliente através do endpoint 
 ## API Endpoints
 
 ### Categories
@@ -229,6 +235,7 @@ To set up the application using Docker compose, follow these steps:
     - `400`: Bad request if the ID is not provided or is invalid.
     - `404`: Product not found if the ID does not match any product.
     - `500`: Internal server error if there is a problem deleting the product.# techchallenge
+      
 ### fakeCheckout
 
 - **POST /fakeCheckout/{id}**
