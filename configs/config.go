@@ -1,5 +1,7 @@
 package configs
 
+import "os"
+
 type Configs struct {
 	MONGO_USER     string `mapstructure:"MONGO_USER"`
 	MONGO_PASSWORD string `mapstructure:"MONGO_PASSWORD"`
