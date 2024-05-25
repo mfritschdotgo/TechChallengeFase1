@@ -75,6 +75,8 @@ To set up the application using Docker compose, follow these steps:
 6. Add a request via the "post" method using the endpoint [Orders](#orders)
 7. Simulate a fake checkout through the endpoint using method post [FakeCheckout](#fakeCheckout), this will change the order status to finished.
 
+Obs.: Through swagger for more details about the APIs
+
 ## API Endpoints
 
 ### Categories
