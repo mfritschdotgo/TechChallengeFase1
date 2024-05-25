@@ -66,7 +66,7 @@ To set up the application using Docker, follow these steps:
     - `500`: Internal server error if there is a problem on the server side.
 
 - **PUT /categories/{id}**
-  - Updates category details by its ID.
+  - Replaced category by its ID.
   - Parameters:
     - `id` (string): Category ID.
   - Body: `dto.CreateCategoryRequest`
@@ -78,6 +78,15 @@ To set up the application using Docker, follow these steps:
 
 - **DELETE /categories/{id}**
   - Deletes a category by its ID.
+  - Parameters:
+    - `id` (string): Category ID.
+  - Responses:
+    - `200`: Message indicating successful deletion.
+    - `400`: Bad request if the ID is not provided or is invalid.
+    - `404`: Category not found if the ID does not match any category.
+    - `500`: Internal server error if there is a problem deleting the category.
+- **Patch /categories/{id}**
+  - Update a category by its ID.
   - Parameters:
     - `id` (string): Category ID.
   - Responses:
@@ -133,6 +142,15 @@ To set up the application using Docker, follow these steps:
     - `200`: Successfully retrieved the order details.
     - `400`: Bad request if the ID is not provided or invalid.
     - `404`: Order not found if the ID does not match any order.
+    - `500`: Internal server error if there is a problem on the server side.
+- **PATCH /orders/{id}/{status}**
+  - Update the status of an order 
+  - Parameters:
+    - `id` (string): Order ID.
+    - `status` (string): status.
+  - Responses:
+    - `200`: Successfully status updated.
+    - `400`: Bad request if the Status is not provided or invalid
     - `500`: Internal server error if there is a problem on the server side.
 
 ### Products
