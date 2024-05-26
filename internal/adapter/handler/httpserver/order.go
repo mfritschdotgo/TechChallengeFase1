@@ -180,7 +180,7 @@ func (h *OrderHandler) FakeCheckout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := h.service.SetOrderStatus(ctx, id, 4)
+	_, err := h.service.SetOrderStatus(ctx, id, 1)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
