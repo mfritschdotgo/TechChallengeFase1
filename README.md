@@ -3,7 +3,7 @@
 ## Overview
 
 The Skina Lanches Management API is designed to facilitate the management of products, categories, clients, and orders for a sandwich shop. The API provides endpoints to create, read, update, and delete entities within the system.
-This project follows a hexagonal architecture and is based on a DDD (Domain driven design) generated from event storming in which the steps can be analyzed in: https://miro.com/app/board/uXjVKTBf0pw=/
+This project follows a hexagonal architecture and is based on a DDD (Domain driven design) generated from event storming in which the steps can be analyzed in: https://miro.com/app/board/uXjVKTBf0pw=/?share_link_id=516597082495
 The image for this project is also available on docker hub: https://hub.docker.com/r/mrcsfritsch/skinaapis
 
 ## Table of Contents
